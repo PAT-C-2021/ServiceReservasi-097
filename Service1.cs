@@ -15,12 +15,30 @@ namespace ServiceReservasi
         SqlConnection conn;
         SqlCommand comm;
 
+        public string GetData(int value)
+        {
+            return string.Format("You entered: {0}", value);
+        }
+
+        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        {
+            if (composite == null)
+            {
+                throw new ArgumentNullException("composite");
+            }
+            if (composite.BoolValue)
+            {
+                composite.StringValue += "Suffix";
+            }
+            return composite;
+        }
+
         public List<DetailLokasi> DetailLokasi()
         {
             List<DetailLokasi> LokasiFull = new List<DetailLokasi>();
             try
             {
-                string sql = "SELECT ID_lokasi, Nama_lokasi, Deskripsi_full, Kuota from dbo.Lokasi";
+                string sql = "select ID_Lokasi, Nama_Lokasi, Deskripsi_Full, Kuota from dbo.Lokasi";
                 conn = new SqlConnection(koneksi);
                 comm = new SqlCommand(sql, conn);
                 conn.Open();
@@ -48,7 +66,7 @@ namespace ServiceReservasi
             List<Pemesanan> pemesanans = new List<Pemesanan>();
             try
             {
-                string sql = "SELECT ID_reservasi, Nama_customer, No_telpon, Jumlah_pemesanan, Nama_Lokasi FROM dbo.Pemesanan p join dbo. p.ID_lokasi = l.ID_lokasi";
+                string sql = "select ID_Reservasi, Nama_Customer, No_Telpon, Jumlah_Pemesanan, Nama_Lokasi from dbo.Pemesanan p join dbo.Lokasi l on l.ID_Lokasi = p.ID_Lokasi";
                 conn = new SqlConnection(koneksi);
                 comm = new SqlCommand(sql, conn);
                 conn.Open();
@@ -143,5 +161,9 @@ namespace ServiceReservasi
             return n;
         }
 
+        public List<CekLokasi> ReviewLokasi()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
